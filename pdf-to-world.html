@@ -33,7 +33,7 @@
         body {
             background: linear-gradient(135deg, var(--light-blue) 0%, var(--white) 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 2rem 1rem;
             color: var(--dark-gray);
             line-height: 1.6;
         }
@@ -41,24 +41,28 @@
         .container {
             max-width: 1000px;
             margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        /* Header & Branding */
+        /* Header */
         header {
             text-align: center;
-            padding: 20px 0 30px;
+            padding: 1rem 0 2rem;
+            flex-shrink: 0;
         }
 
         .brand {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
         }
 
         .brand i {
-            font-size: 2rem;
+            font-size: 2.25rem;
             color: var(--primary-blue);
         }
 
@@ -69,10 +73,16 @@
         }
 
         .subtitle {
-            font-size: 1.1rem;
-            color: var(--dark-gray);
-            max-width: 700px;
+            max-width: 600px;
             margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Tool Container */
@@ -81,24 +91,35 @@
             border-radius: 12px;
             box-shadow: var(--shadow);
             overflow: hidden;
-            margin-bottom: 30px;
+            margin-bottom: 2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .tool-content {
-            padding: 30px;
+            padding: 2rem;
             text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Upload Area */
         .upload-area {
             border: 2px dashed var(--medium-gray);
             border-radius: 10px;
-            padding: 30px 20px;
+            padding: 2.5rem 1.5rem;
             text-align: center;
             cursor: pointer;
             transition: var(--transition);
             background: var(--white);
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .upload-area:hover {
@@ -107,42 +128,53 @@
         }
 
         .upload-area i {
-            font-size: 3rem;
+            font-size: 3.5rem;
             color: var(--primary-blue);
-            margin-bottom: 10px;
+            margin-bottom: 1.25rem;
         }
 
         .upload-area h3 {
-            font-size: 1.2rem;
-            margin-bottom: 8px;
+            font-size: 1.35rem;
+            margin-bottom: 0.75rem;
             color: var(--dark-blue);
         }
 
         .upload-area p {
             color: var(--dark-gray);
-            margin-bottom: 15px;
-            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
         }
 
         /* Buttons */
+        .btn-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: auto;
+        }
+
         .btn {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
             background: var(--primary-blue);
             color: var(--white);
             border: none;
-            padding: 12px 25px;
-            border-radius: 6px;
+            padding: 0.75rem 1.75rem;
+            border-radius: 8px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(30, 136, 229, 0.3);
+            min-width: 200px;
         }
 
         .btn:hover {
             background: var(--dark-blue);
             transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(30, 136, 229, 0.3);
         }
 
         .btn:disabled {
@@ -152,18 +184,14 @@
             box-shadow: none;
         }
 
-        .btn i {
-            margin-right: 8px;
-        }
-
         #file-input {
             display: none;
         }
 
         /* Status & Preview */
         .status {
-            margin: 20px 0;
-            padding: 15px;
+            margin: 1.5rem 0;
+            padding: 1rem;
             border-radius: 8px;
             background: var(--light-gray);
             display: none;
@@ -183,13 +211,13 @@
 
         /* Loading Spinner */
         .spinner {
-            width: 40px;
-            height: 40px;
+            width: 3rem;
+            height: 3rem;
             border: 4px solid rgba(0, 0, 0, 0.1);
             border-radius: 50%;
             border-top: 4px solid var(--primary-blue);
             animation: spin 1s linear infinite;
-            margin: 20px auto;
+            margin: 1.5rem auto;
             display: none;
         }
 
@@ -201,28 +229,56 @@
         /* Footer */
         footer {
             text-align: center;
-            padding: 20px;
+            padding: 1.5rem;
             color: var(--dark-gray);
             font-size: 0.9rem;
+            flex-shrink: 0;
         }
 
         /* Responsive Adjustments */
         @media (max-width: 768px) {
             .brand h1 {
-                font-size: 1.8rem;
+                font-size: 1.75rem;
             }
             
             .subtitle {
                 font-size: 1rem;
+                padding: 0 1rem;
             }
             
             .tool-content {
-                padding: 20px;
+                padding: 1.5rem;
+            }
+            
+            .upload-area {
+                padding: 2rem 1rem;
+            }
+            
+            .upload-area i {
+                font-size: 3rem;
             }
             
             .btn {
-                padding: 10px 20px;
-                font-size: 0.9rem;
+                min-width: 160px;
+                padding: 0.65rem 1.5rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .brand {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .btn-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 240px;
             }
         }
     </style>
@@ -237,31 +293,34 @@
             <p class="subtitle">Convert PDF files to editable Word documents in seconds</p>
         </header>
 
-        <div class="tool-container">
-            <div class="tool-content">
-                <div class="upload-area" id="drop-area">
-                    <i class="fas fa-file-pdf"></i>
-                    <h3>Drag & Drop PDF File</h3>
-                    <p>or click to browse files (Max: 10MB)</p>
-                    <button class="btn" id="upload-btn">
-                        <i class="fas fa-folder-open"></i> Select PDF
-                    </button>
-                    <input type="file" id="file-input" accept=".pdf">
+        <main>
+            <div class="tool-container">
+                <div class="tool-content">
+                    <div class="upload-area" id="drop-area">
+                        <i class="fas fa-file-pdf"></i>
+                        <h3>Drag & Drop PDF File</h3>
+                        <p>or click to browse files (Max: 10MB)</p>
+                        <button class="btn" id="upload-btn">
+                            <i class="fas fa-folder-open"></i> Select PDF
+                        </button>
+                        <input type="file" id="file-input" accept=".pdf">
+                    </div>
+
+                    <div class="spinner" id="loading-spinner"></div>
+
+                    <div class="status" id="status-message"></div>
+
+                    <div class="btn-container">
+                        <button class="btn" id="convert-btn" disabled>
+                            <i class="fas fa-exchange-alt"></i> Convert to Word
+                        </button>
+                        <button class="btn" id="download-btn" disabled>
+                            <i class="fas fa-download"></i> Download DOCX
+                        </button>
+                    </div>
                 </div>
-
-                <div class="spinner" id="loading-spinner"></div>
-
-                <div class="status" id="status-message"></div>
-
-                <button class="btn" id="convert-btn" disabled>
-                    <i class="fas fa-exchange-alt"></i> Convert to Word
-                </button>
-
-                <button class="btn" id="download-btn" disabled>
-                    <i class="fas fa-download"></i> Download DOCX
-                </button>
             </div>
-        </div>
+        </main>
 
         <footer>
             <p>© 2023 <strong>Tools Vibe</strong> | Free Online PDF Tools</p>
@@ -310,7 +369,7 @@
             
             function highlight() {
                 dropArea.style.borderColor = 'var(--primary-blue)';
-                dropArea.style.backgroundColor = 'rgba(30, 136, 229, 0.05)';
+                dropArea.style.backgroundColor = 'rgba(30, 136, 229, 0.1)';
             }
             
             function unhighlight() {
@@ -379,20 +438,33 @@
                         fullText += text.items.map(item => item.str).join(' ') + '\n\n';
                     }
                     
-                    // Create a Word document
-                    const { Document, Paragraph, TextRun, Packer } = docx;
+                    // Create a Word document with proper spacing
+                    const { Document, Paragraph, TextRun, Packer, HeadingLevel } = docx;
                     
                     const doc = new Document({
+                        styles: {
+                            paragraphStyles: [{
+                                id: "Normal",
+                                name: "Normal",
+                                run: {
+                                    size: 24, // 12pt
+                                },
+                                paragraph: {
+                                    spacing: {
+                                        line: 276, // 1.15 line spacing
+                                        before: 100, // Small space before paragraph
+                                        after: 100  // Small space after paragraph
+                                    }
+                                }
+                            }]
+                        },
                         sections: [{
                             properties: {},
                             children: [
                                 new Paragraph({
-                                    children: [
-                                        new TextRun({
-                                            text: fullText,
-                                            size: 24, // 12pt
-                                        }),
-                                    ],
+                                    text: fullText,
+                                    heading: HeadingLevel.HEADING_1,
+                                    style: "Normal"
                                 }),
                             ],
                         }],
