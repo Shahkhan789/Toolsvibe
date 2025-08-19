@@ -120,6 +120,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            min-height: 300px;
         }
 
         .upload-area:hover {
@@ -209,6 +210,23 @@
             display: block;
         }
 
+        .error-details {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 0.5rem;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .show-details {
+            color: var(--primary-blue);
+            text-decoration: underline;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
         /* Loading Spinner */
         .spinner {
             width: 3rem;
@@ -233,6 +251,31 @@
             color: var(--dark-gray);
             font-size: 0.9rem;
             flex-shrink: 0;
+        }
+
+        /* Tips Section */
+        .tips {
+            background: var(--light-gray);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            text-align: left;
+        }
+
+        .tips h3 {
+            color: var(--dark-blue);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tips ul {
+            padding-left: 1.5rem;
+        }
+
+        .tips li {
+            margin-bottom: 0.75rem;
         }
 
         /* Responsive Adjustments */
@@ -308,7 +351,11 @@
 
                     <div class="spinner" id="loading-spinner"></div>
 
-                    <div class="status" id="status-message"></div>
+                    <div class="status" id="status-message">
+                        <div id="status-text">Conversion failed. Please try another file</div>
+                        <div class="error-details" id="error-details"></div>
+                        <div class="show-details" id="show-details">Show technical details</div>
+                    </div>
 
                     <div class="btn-container">
                         <button class="btn" id="convert-btn" disabled>
@@ -317,6 +364,16 @@
                         <button class="btn" id="download-btn" disabled>
                             <i class="fas fa-download"></i> Download DOCX
                         </button>
+                    </div>
+
+                    <div class="tips">
+                        <h3><i class="fas fa-lightbulb"></i> Conversion Tips</h3>
+                        <ul>
+                            <li>Ensure your PDF contains text (scanned documents won't convert properly)</li>
+                            <li>Simple documents with standard fonts convert best</li>
+                            <li>Try smaller files (under 5MB) for faster conversion</li>
+                            <li>Password-protected files cannot be converted</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -338,16 +395,23 @@
             const downloadBtn = document.getElementById('download-btn');
             const spinner = document.getElementById('loading-spinner');
             const statusMsg = document.getElementById('status-message');
+            const statusText = document.getElementById('status-text');
+            const errorDetails = document.getElementById('error-details');
+            const showDetails = document.getElementById('show-details');
             
             // State variables
             let pdfFile = null;
             let wordBlob = null;
+
+            // Initialize the status message as hidden
+            statusMsg.style.display = 'none';
 
             // Event listeners
             uploadBtn.addEventListener('click', () => fileInput.click());
             fileInput.addEventListener('change', handleFileSelect);
             convertBtn.addEventListener('click', convertToWord);
             downloadBtn.addEventListener('click', downloadWordFile);
+            showDetails.addEventListener('click', toggleErrorDetails);
             
             // Drag and drop functionality
             ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -394,15 +458,21 @@
                 
                 if (!file) return;
                 
+                // Reset status message
+                statusMsg.style.display = 'none';
+                statusMsg.classList.remove('success', 'error');
+                errorDetails.style.display = 'none';
+                showDetails.textContent = 'Show technical details';
+                
                 // Check if file is PDF
                 if (!file.type.includes('pdf') && !file.name.toLowerCase().endsWith('.pdf')) {
-                    showStatus('Please select a valid PDF file', 'error');
+                    showStatus('Please select a valid PDF file', 'error', 'The selected file is not a PDF document. Only .pdf files are supported.');
                     return;
                 }
                 
                 // Check file size (max 10MB)
                 if (file.size > 10 * 1024 * 1024) {
-                    showStatus('File size exceeds 10MB limit', 'error');
+                    showStatus('File size exceeds 10MB limit', 'error', 'Your file is ' + formatFileSize(file.size) + '. Please select a smaller file.');
                     return;
                 }
                 
@@ -418,7 +488,6 @@
                 
                 showSpinner();
                 convertBtn.disabled = true;
-                statusMsg.classList.remove('success', 'error');
                 statusMsg.style.display = 'none';
                 
                 try {
@@ -428,43 +497,53 @@
                     // Load the PDF document
                     const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
                     
+                    // Check if the document is encrypted
+                    if (pdfDoc.isEncrypted) {
+                        showStatus('Encrypted PDF not supported', 'error', 'This PDF is password-protected. Please remove the password and try again.');
+                        return;
+                    }
+                    
                     // Extract text from each page
                     const pages = pdfDoc.getPages();
+                    
+                    // Check if we can extract text
+                    if (pages.length === 0) {
+                        showStatus('Empty PDF document', 'error', 'The PDF appears to have no content.');
+                        return;
+                    }
+                    
                     let fullText = '';
+                    let hasText = false;
                     
                     for (let i = 0; i < pages.length; i++) {
                         const page = pages[i];
                         const text = await page.getTextContent();
-                        fullText += text.items.map(item => item.str).join(' ') + '\n\n';
+                        
+                        if (text.items.length > 0) {
+                            hasText = true;
+                            fullText += text.items.map(item => item.str).join(' ') + '\n\n';
+                        }
                     }
                     
-                    // Create a Word document with proper spacing
-                    const { Document, Paragraph, TextRun, Packer, HeadingLevel } = docx;
+                    if (!hasText) {
+                        showStatus('No text found in PDF', 'error', 'This PDF appears to be image-based. Our converter only works with text-based PDFs.');
+                        return;
+                    }
+                    
+                    // Create a Word document
+                    const { Document, Paragraph, TextRun, Packer } = docx;
                     
                     const doc = new Document({
-                        styles: {
-                            paragraphStyles: [{
-                                id: "Normal",
-                                name: "Normal",
-                                run: {
-                                    size: 24, // 12pt
-                                },
-                                paragraph: {
-                                    spacing: {
-                                        line: 276, // 1.15 line spacing
-                                        before: 100, // Small space before paragraph
-                                        after: 100  // Small space after paragraph
-                                    }
-                                }
-                            }]
-                        },
                         sections: [{
                             properties: {},
                             children: [
                                 new Paragraph({
-                                    text: fullText,
-                                    heading: HeadingLevel.HEADING_1,
-                                    style: "Normal"
+                                    children: [
+                                        new TextRun({
+                                            text: fullText,
+                                            size: 24, // 12pt
+                                        }),
+                                    ],
                                 }),
                             ],
                         }],
@@ -478,7 +557,19 @@
                     downloadBtn.disabled = false;
                 } catch (error) {
                     console.error('Conversion error:', error);
-                    showStatus('Conversion failed. Please try another file', 'error');
+                    
+                    let errorMessage = 'Conversion failed. Please try another file';
+                    let detailedMessage = error.message || 'An unexpected error occurred during conversion.';
+                    
+                    if (error.message.includes("Password required")) {
+                        errorMessage = 'Encrypted PDF not supported';
+                        detailedMessage = 'This PDF is password-protected. Please remove the password and try again.';
+                    } else if (error.message.includes("Malformed PDF")) {
+                        errorMessage = 'Invalid PDF file';
+                        detailedMessage = 'The PDF file appears to be corrupted or malformed.';
+                    }
+                    
+                    showStatus(errorMessage, 'error', detailedMessage);
                     convertBtn.disabled = false;
                 } finally {
                     hideSpinner();
@@ -494,11 +585,19 @@
             }
             
             // Helper functions
-            function showStatus(message, type) {
-                statusMsg.textContent = message;
+            function showStatus(message, type, details = '') {
+                statusText.textContent = message;
                 statusMsg.className = 'status';
                 statusMsg.classList.add(type);
                 statusMsg.style.display = 'block';
+                
+                if (details && type === 'error') {
+                    errorDetails.textContent = details;
+                    showDetails.style.display = 'block';
+                } else {
+                    errorDetails.style.display = 'none';
+                    showDetails.style.display = 'none';
+                }
             }
             
             function showSpinner() {
@@ -507,6 +606,24 @@
             
             function hideSpinner() {
                 spinner.style.display = 'none';
+            }
+            
+            function toggleErrorDetails() {
+                if (errorDetails.style.display === 'none') {
+                    errorDetails.style.display = 'block';
+                    showDetails.textContent = 'Hide technical details';
+                } else {
+                    errorDetails.style.display = 'none';
+                    showDetails.textContent = 'Show technical details';
+                }
+            }
+            
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
             }
         });
     </script>
