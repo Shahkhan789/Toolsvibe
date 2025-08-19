@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Convert PDF to Word (DOCX) online for free with Tools Vibe. No registration required. Fast, secure, and easy to use.">
+    <meta name="keywords" content="PDF to Word, PDF to DOCX, convert PDF, online PDF converter, free PDF tool, Tools Vibe">
+    <title>PDF to Word Converter | Free Online Tool | Tools Vibe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.1.0/docx.min.js"></script>
+    <style>
+        :root {
+            --primary-blue: #1e88e5;
+            --dark-blue: #0d47a1;
+            --light-blue: #bbdefb;
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+            --medium-gray: #e0e0e0;
+            --dark-gray: #424242;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--white) 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--dark-gray);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Header & Branding */
+        header {
+            text-align: center;
+            padding: 20px 0 30px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .brand i {
+            font-size: 2rem;
+            color: var(--primary-blue);
+        }
+
+        .brand h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-blue);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--dark-gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Tool Container */
+        .tool-container {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .tool-content {
+            padding: 30px;
+            text-align: center;
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed var(--medium-gray);
+            border-radius: 10px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--white);
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-blue);
+            background: rgba(30, 136, 229, 0.05);
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+
+        .upload-area h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: var(--dark-blue);
+        }
+
+        .upload-area p {
+            color: var(--dark-gray);
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            background: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(30, 136, 229, 0.3);
+        }
+
+        .btn:hover {
+            background: var(--dark-blue);
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background: var(--medium-gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        /* Status & Preview */
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background: var(--light-gray);
+            display: none;
+        }
+
+        .status.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            display: block;
+        }
+
+        .status.error {
+            background: #ffebee;
+            color: #c62828;
+            display: block;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary-blue);
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .brand h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .tool-content {
+                padding: 20px;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="brand">
+                <i class="fas fa-tools"></i>
+                <h1>Tools Vibe</h1>
+            </div>
+            <p class="subtitle">Convert PDF files to editable Word documents in seconds</p>
+        </header>
+
+        <div class="tool-container">
+            <div class="tool-content">
+                <div class="upload-area" id="drop-area">
+                    <i class="fas fa-file-pdf"></i>
+                    <h3>Drag & Drop PDF File</h3>
+                    <p>or click to browse files (Max: 10MB)</p>
+                    <button class="btn" id="upload-btn">
+                        <i class="fas fa-folder-open"></i> Select PDF
+                    </button>
+                    <input type="file" id="file-input" accept=".pdf">
+                </div>
+
+                <div class="spinner" id="loading-spinner"></div>
+
+                <div class="status" id="status-message"></div>
+
+                <button class="btn" id="convert-btn" disabled>
+                    <i class="fas fa-exchange-alt"></i> Convert to Word
+                </button>
+
+                <button class="btn" id="download-btn" disabled>
+                    <i class="fas fa-download"></i> Download DOCX
+                </button>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2023 <strong>Tools Vibe</strong> | Free Online PDF Tools</p>
+            <p>All conversions happen in your browser - your files are never uploaded</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const fileInput = document.getElementById('file-input');
+            const uploadBtn = document.getElementById('upload-btn');
+            const dropArea = document.getElementById('drop-area');
+            const convertBtn = document.getElementById('convert-btn');
+            const downloadBtn = document.getElementById('download-btn');
+            const spinner = document.getElementById('loading-spinner');
+            const statusMsg = document.getElementById('status-message');
+            
+            // State variables
+            let pdfFile = null;
+            let wordBlob = null;
+
+            // Event listeners
+            uploadBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', handleFileSelect);
+            convertBtn.addEventListener('click', convertToWord);
+            downloadBtn.addEventListener('click', downloadWordFile);
+            
+            // Drag and drop functionality
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                dropArea.style.borderColor = 'var(--primary-blue)';
+                dropArea.style.backgroundColor = 'rgba(30, 136, 229, 0.05)';
+            }
+            
+            function unhighlight() {
+                dropArea.style.borderColor = 'var(--medium-gray)';
+                dropArea.style.backgroundColor = 'var(--white)';
+            }
+            
+            dropArea.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                if (files.length) {
+                    fileInput.files = files;
+                    handleFileSelect();
+                }
+            }
+            
+            // Handle file selection
+            function handleFileSelect() {
+                const file = fileInput.files[0];
+                
+                if (!file) return;
+                
+                // Check if file is PDF
+                if (!file.type.includes('pdf') && !file.name.toLowerCase().endsWith('.pdf')) {
+                    showStatus('Please select a valid PDF file', 'error');
+                    return;
+                }
+                
+                // Check file size (max 10MB)
+                if (file.size > 10 * 1024 * 1024) {
+                    showStatus('File size exceeds 10MB limit', 'error');
+                    return;
+                }
+                
+                pdfFile = file;
+                showStatus(`Ready to convert: ${file.name}`, 'success');
+                convertBtn.disabled = false;
+                downloadBtn.disabled = true;
+            }
+            
+            // Convert PDF to Word
+            async function convertToWord() {
+                if (!pdfFile) return;
+                
+                showSpinner();
+                convertBtn.disabled = true;
+                statusMsg.classList.remove('success', 'error');
+                statusMsg.style.display = 'none';
+                
+                try {
+                    // Read the PDF file
+                    const arrayBuffer = await pdfFile.arrayBuffer();
+                    
+                    // Load the PDF document
+                    const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+                    
+                    // Extract text from each page
+                    const pages = pdfDoc.getPages();
+                    let fullText = '';
+                    
+                    for (let i = 0; i < pages.length; i++) {
+                        const page = pages[i];
+                        const text = await page.getTextContent();
+                        fullText += text.items.map(item => item.str).join(' ') + '\n\n';
+                    }
+                    
+                    // Create a Word document
+                    const { Document, Paragraph, TextRun, Packer } = docx;
+                    
+                    const doc = new Document({
+                        sections: [{
+                            properties: {},
+                            children: [
+                                new Paragraph({
+                                    children: [
+                                        new TextRun({
+                                            text: fullText,
+                                            size: 24, // 12pt
+                                        }),
+                                    ],
+                                }),
+                            ],
+                        }],
+                    });
+                    
+                    // Generate the Word file
+                    const blob = await Packer.toBlob(doc);
+                    wordBlob = blob;
+                    
+                    showStatus('Conversion successful! Ready to download', 'success');
+                    downloadBtn.disabled = false;
+                } catch (error) {
+                    console.error('Conversion error:', error);
+                    showStatus('Conversion failed. Please try another file', 'error');
+                    convertBtn.disabled = false;
+                } finally {
+                    hideSpinner();
+                }
+            }
+            
+            // Download Word file
+            function downloadWordFile() {
+                if (!wordBlob) return;
+                
+                const filename = pdfFile.name.replace('.pdf', '') || 'converted-document';
+                saveAs(wordBlob, `${filename}.docx`);
+            }
+            
+            // Helper functions
+            function showStatus(message, type) {
+                statusMsg.textContent = message;
+                statusMsg.className = 'status';
+                statusMsg.classList.add(type);
+                statusMsg.style.display = 'block';
+            }
+            
+            function showSpinner() {
+                spinner.style.display = 'block';
+            }
+            
+            function hideSpinner() {
+                spinner.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
