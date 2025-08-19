@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Rotator & Flipper | Tools Vibe</title>
+    <style>
+        :root {
+            --primary: #1e88e5;
+            --primary-dark: #1565c0;
+            --light: #bbdefb;
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+            --medium-gray: #e0e0e0;
+            --dark: #212121;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: var(--light-gray);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo i {
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tool-card {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 768px) {
+            .tool-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .panel {
+            padding: 1.5rem;
+        }
+
+        .upload-panel {
+            background: var(--light-gray);
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        @media (min-width: 768px) {
+            .upload-panel {
+                border-bottom: none;
+                border-right: 1px solid var(--medium-gray);
+            }
+        }
+
+        .panel-title {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .panel-title i {
+            color: var(--primary);
+        }
+
+        .upload-zone {
+            border: 2px dashed var(--medium-gray);
+            border-radius: 8px;
+            padding: 2rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 1.5rem;
+            background: var(--white);
+        }
+
+        .upload-zone:hover {
+            border-color: var(--primary);
+            background: rgba(30, 136, 229, 0.05);
+        }
+
+        .upload-zone i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-zone h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .preview-container {
+            width: 100%;
+            min-height: 300px;
+            background: var(--light-gray);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--medium-gray);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            display: none;
+        }
+
+        .placeholder {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (min-width: 480px) {
+            .controls {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .control-btn {
+            background: var(--white);
+            border: 1px solid var(--medium-gray);
+            border-radius: 8px;
+            padding: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .control-btn:hover {
+            border-color: var(--primary);
+            background: rgba(30, 136, 229, 0.05);
+        }
+
+        .control-btn i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .action-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .spinner {
+            width: 2rem;
+            height: 2rem;
+            border: 3px solid rgba(0,0,0,0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--dark);
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-tools"></i>
+                <h1>Tools Vibe</h1>
+            </div>
+            <p class="subtitle">Rotate and flip your images with this easy-to-use tool</p>
+        </header>
+
+        <div class="tool-card">
+            <div class="tool-grid">
+                <div class="panel upload-panel">
+                    <h2 class="panel-title"><i class="fas fa-upload"></i> Upload Image</h2>
+                    
+                    <div class="upload-zone" id="drop-zone">
+                        <i class="fas fa-image"></i>
+                        <h3>Drag & drop your image here</h3>
+                        <p>or click to browse files (JPG, PNG, GIF)</p>
+                        <button class="btn" id="upload-btn">
+                            <i class="fas fa-folder-open"></i> Select Image
+                        </button>
+                        <input type="file" id="file-input" accept="image/*">
+                    </div>
+
+                    <div class="spinner" id="spinner"></div>
+
+                    <div class="controls">
+                        <div class="control-btn" data-action="rotate-left">
+                            <i class="fas fa-undo"></i>
+                            <span>Rotate Left</span>
+                        </div>
+                        <div class="control-btn" data-action="rotate-right">
+                            <i class="fas fa-redo"></i>
+                            <span>Rotate Right</span>
+                        </div>
+                        <div class="control-btn" data-action="flip-horizontal">
+                            <i class="fas fa-arrows-alt-h"></i>
+                            <span>Flip Horizontal</span>
+                        </div>
+                        <div class="control-btn" data-action="flip-vertical">
+                            <i class="fas fa-arrows-alt-v"></i>
+                            <span>Flip Vertical</span>
+                        </div>
+                    </div>
+
+                    <div class="action-btns">
+                        <button class="btn btn-outline" id="reset-btn">
+                            <i class="fas fa-sync-alt"></i> Reset
+                        </button>
+                        <button class="btn" id="download-btn" disabled>
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2 class="panel-title"><i class="fas fa-image"></i> Preview</h2>
+                    
+                    <div class="preview-container">
+                        <div class="placeholder">
+                            <i class="fas fa-image" style="font-size: 3rem; color: var(--light); margin-bottom: 1rem;"></i>
+                            <p>Your transformed image will appear here</p>
+                        </div>
+                        <img class="preview-image" id="preview-img" alt="Preview">
+                        <canvas id="canvas" style="display: none;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2023 Tools Vibe | Free Online Image Tools</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM elements
+            const fileInput = document.getElementById('file-input');
+            const uploadBtn = document.getElementById('upload-btn');
+            const dropZone = document.getElementById('drop-zone');
+            const previewImg = document.getElementById('preview-img');
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const spinner = document.getElementById('spinner');
+            const placeholder = document.querySelector('.placeholder');
+            const downloadBtn = document.getElementById('download-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const controlBtns = document.querySelectorAll('.control-btn');
+
+            // State
+            let originalImage = null;
+            let currentRotation = 0;
+            let currentScaleX = 1;
+            let currentScaleY = 1;
+
+            // Event listeners
+            uploadBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', handleFileSelect);
+            downloadBtn.addEventListener('click', downloadImage);
+            resetBtn.addEventListener('click', resetImage);
+
+            // Add drag and drop functionality
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(event => {
+                dropZone.addEventListener(event, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(event => {
+                dropZone.addEventListener(event, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(event => {
+                dropZone.addEventListener(event, unhighlight, false);
+            });
+
+            function highlight() {
+                dropZone.style.borderColor = 'var(--primary)';
+                dropZone.style.backgroundColor = 'rgba(30, 136, 229, 0.1)';
+            }
+
+            function unhighlight() {
+                dropZone.style.borderColor = 'var(--medium-gray)';
+                dropZone.style.backgroundColor = 'var(--white)';
+            }
+
+            dropZone.addEventListener('drop', handleDrop, false);
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                if (files.length) {
+                    fileInput.files = files;
+                    handleFileSelect();
+                }
+            }
+
+            // Control buttons
+            controlBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const action = this.getAttribute('data-action');
+                    transformImage(action);
+                });
+            });
+
+            // Handle file selection
+            function handleFileSelect() {
+                const file = fileInput.files[0];
+                
+                if (!file || !file.type.match('image.*')) {
+                    alert('Please select a valid image file (JPG, PNG, GIF)');
+                    return;
+                }
+
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Image size exceeds 5MB limit');
+                    return;
+                }
+
+                showSpinner();
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        originalImage = img;
+                        currentRotation = 0;
+                        currentScaleX = 1;
+                        currentScaleY = 1;
+                        
+                        // Initialize canvas
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        ctx.drawImage(img, 0, 0);
+                        
+                        updatePreview();
+                        downloadBtn.disabled = false;
+                        hideSpinner();
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+
+            // Apply transformations
+            function transformImage(action) {
+                if (!originalImage) return;
+
+                switch(action) {
+                    case 'rotate-left':
+                        currentRotation = (currentRotation - 90) % 360;
+                        break;
+                    case 'rotate-right':
+                        currentRotation = (currentRotation + 90) % 360;
+                        break;
+                    case 'flip-horizontal':
+                        currentScaleX *= -1;
+                        break;
+                    case 'flip-vertical':
+                        currentScaleY *= -1;
+                        break;
+                }
+
+                updatePreview();
+            }
+
+            // Update preview
+            function updatePreview() {
+                if (!originalImage) return;
+
+                // Calculate new dimensions
+                let width = originalImage.width;
+                let height = originalImage.height;
+
+                if (currentRotation % 180 !== 0) {
+                    [width, height] = [height, width];
+                }
+
+                // Resize canvas
+                canvas.width = width;
+                canvas.height = height;
+
+                // Clear and redraw with transformations
+                ctx.save();
+                ctx.clearRect(0, 0, width, height);
+                ctx.translate(width / 2, height / 2);
+                ctx.rotate(currentRotation * Math.PI / 180);
+                ctx.scale(currentScaleX, currentScaleY);
+                ctx.drawImage(
+                    originalImage,
+                    -originalImage.width / 2,
+                    -originalImage.height / 2,
+                    originalImage.width,
+                    originalImage.height
+                );
+                ctx.restore();
+
+                // Update preview image
+                previewImg.src = canvas.toDataURL('image/png');
+                previewImg.style.display = 'block';
+                placeholder.style.display = 'none';
+            }
+
+            // Reset image
+            function resetImage() {
+                if (!originalImage) return;
+
+                currentRotation = 0;
+                currentScaleX = 1;
+                currentScaleY = 1;
+                updatePreview();
+            }
+
+            // Download image
+            function downloadImage() {
+                if (!originalImage) return;
+
+                const link = document.createElement('a');
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                link.download = `tools-vibe-${timestamp}.png`;
+                link.href = canvas.toDataURL('image/png');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+
+            // Spinner functions
+            function showSpinner() {
+                spinner.style.display = 'block';
+                previewImg.style.display = 'none';
+                placeholder.style.display = 'none';
+            }
+
+            function hideSpinner() {
+                spinner.style.display = 'none';
+            }
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</body>
+</html>
