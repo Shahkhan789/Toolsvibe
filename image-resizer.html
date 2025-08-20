@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online image resizer tool. Resize your images easily without losing quality. Part of Tools Vibe's multi-tool website.">
+    <meta name="keywords" content="image resizer, resize images, image tool, online tools, Tools Vibe">
+    <meta name="author" content="Tools Vibe">
+    <meta property="og:title" content="Image Resizer Tool - Tools Vibe">
+    <meta property="og:description" content="Free online image resizer to adjust image dimensions while maintaining quality.">
+    <meta property="og:url" content="https://www.toolsvibe.run.place/image-resizer">
+    <meta property="og:type" content="website">
+    <title>Image Resizer Tool - Adjust Image Dimensions Online | Tools Vibe</title>
+    <link rel="canonical" href="https://www.toolsvibe.run.place/image-resizer">
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --bright-blue: #0099ff;
+            --light-blue: #e6f2ff;
+            --dark-blue: #0066cc;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --text-dark: #333333;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--white);
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logo span {
+            color: var(--light-blue);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        nav ul li a:hover {
+            opacity: 0.8;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+            background-color: var(--white);
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-blue);
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto 1.5rem;
+            color: #666;
+        }
+        
+        .tool-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .upload-section {
+            border: 2px dashed var(--primary-blue);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            background-color: var(--light-blue);
+            transition: all 0.3s;
+        }
+        
+        .upload-section:hover {
+            background-color: #d9eaff;
+        }
+        
+        .upload-section.dragover {
+            background-color: #cce5ff;
+            border-color: var(--dark-blue);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+        
+        .upload-section h3 {
+            margin-bottom: 1rem;
+            color: var(--primary-blue);
+        }
+        
+        .upload-section p {
+            margin-bottom: 1.5rem;
+            color: #666;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(to right, var(--primary-blue), var(--bright-blue));
+            color: var(--white);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-blue);
+            color: var(--primary-blue);
+            box-shadow: none;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-blue);
+            color: var(--white);
+        }
+        
+        #file-input {
+            display: none;
+        }
+        
+        .controls-section {
+            display: none;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .resize-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .control-group label {
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+        
+        .dimension-input {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .dimension-input input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+        
+        .dimension-input span {
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+        
+        .aspect-ratio {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--primary-blue);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .preview-section {
+            display: none;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .preview-title {
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+        
+        .preview-box {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            background-color: var(--light-blue);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .preview-box h4 {
+            margin-bottom: 1rem;
+            color: var(--primary-blue);
+        }
+        
+        .image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .file-info {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .download-section {
+            text-align: center;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .resize-info {
+            background-color: var(--light-blue);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-top: 1rem;
+            text-align: center;
+            display: none;
+        }
+        
+        .resize-info p {
+            margin: 0.5rem 0;
+            font-weight: 500;
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--white);
+            padding: 2rem 0;
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .footer-links a {
+            color: var(--white);
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .footer-links a:hover {
+            opacity: 0.8;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 1rem 0;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            nav ul li {
+                margin: 0 0.5rem;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .preview-container {
+                flex-direction: column;
+            }
+            
+            .preview-box {
+                min-width: auto;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero {
+                padding: 2rem 0;
+            }
+            
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .tool-container {
+                padding: 1.5rem;
+            }
+            
+            .upload-section {
+                padding: 1.5rem;
+            }
+            
+            .resize-controls {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <h1>Tools <span>Vibe</span></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="https://www.toolsvibe.run.place">Home</a></li>
+                    <li><a href="#">All Tools</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h2>Image Resizer Tool</h2>
+            <p>Resize your images to any dimensions while maintaining quality. Upload your image, set your desired width and height, and download the resized version instantly.</p>
+        </section>
+
+        <section class="tool-container">
+            <div class="upload-section" id="drop-area">
+                <div class="upload-icon">📁</div>
+                <h3>Upload Your Image</h3>
+                <p>Drag & drop your image here or click to browse</p>
+                <p>Supports JPG, PNG, and WebP formats (Max: 5MB)</p>
+                <button class="btn" id="upload-btn">Select Image</button>
+                <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp">
+            </div>
+
+            <div class="controls-section" id="controls-section">
+                <div class="resize-controls">
+                    <div class="control-group">
+                        <label for="width-input">Width (px)</label>
+                        <div class="dimension-input">
+                            <input type="number" id="width-input" min="1" placeholder="Width">
+                            <span>px</span>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="height-input">Height (px)</label>
+                        <div class="dimension-input">
+                            <input type="number" id="height-input" min="1" placeholder="Height">
+                            <span>px</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="aspect-ratio">
+                    <label for="maintain-ratio">Maintain aspect ratio</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="maintain-ratio" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn" id="resize-btn">Resize Image</button>
+                    <button class="btn btn-outline" id="reset-btn">Reset</button>
+                </div>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Resizing image...</p>
+            </div>
+
+            <div class="preview-section" id="preview-section">
+                <h3 class="preview-title">Image Preview</h3>
+                <div class="preview-container">
+                    <div class="preview-box">
+                        <h4>Original Image</h4>
+                        <img id="original-preview" class="image-preview" alt="Original image preview">
+                        <div class="file-info" id="original-info"></div>
+                    </div>
+                    <div class="preview-box">
+                        <h4>Resized Image</h4>
+                        <img id="resized-preview" class="image-preview" alt="Resized image preview">
+                        <div class="file-info" id="resized-info"></div>
+                    </div>
+                </div>
+
+                <div class="resize-info" id="resize-info">
+                    <p>New dimensions: <span id="new-dimensions"></span></p>
+                </div>
+
+                <div class="download-section" id="download-section">
+                    <button class="btn" id="download-btn">Download Resized Image</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-logo">Tools Vibe</div>
+            <div class="footer-links">
+                <a href="https://www.toolsvibe.run.place">Home</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Tools Vibe. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const dropArea = document.getElementById('drop-area');
+            const fileInput = document.getElementById('file-input');
+            const uploadBtn = document.getElementById('upload-btn');
+            const controlsSection = document.getElementById('controls-section');
+            const widthInput = document.getElementById('width-input');
+            const heightInput = document.getElementById('height-input');
+            const maintainRatio = document.getElementById('maintain-ratio');
+            const resizeBtn = document.getElementById('resize-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const previewSection = document.getElementById('preview-section');
+            const originalPreview = document.getElementById('original-preview');
+            const resizedPreview = document.getElementById('resized-preview');
+            const originalInfo = document.getElementById('original-info');
+            const resizedInfo = document.getElementById('resized-info');
+            const resizeInfo = document.getElementById('resize-info');
+            const newDimensions = document.getElementById('new-dimensions');
+            const downloadSection = document.getElementById('download-section');
+            const downloadBtn = document.getElementById('download-btn');
+            const loading = document.getElementById('loading');
+            
+            let originalImage = null;
+            let resizedImageBlob = null;
+            let originalWidth = 0;
+            let originalHeight = 0;
+            let aspectRatio = 0;
+            
+            // Upload button click handler
+            uploadBtn.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            // File input change handler
+            fileInput.addEventListener('change', function(e) {
+                handleFile(e.target.files[0]);
+            });
+            
+            // Drag and drop handlers
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                dropArea.classList.add('dragover');
+            }
+            
+            function unhighlight() {
+                dropArea.classList.remove('dragover');
+            }
+            
+            dropArea.addEventListener('drop', function(e) {
+                const dt = e.dataTransfer;
+                const file = dt.files[0];
+                handleFile(file);
+            });
+            
+            // Handle the selected file
+            function handleFile(file) {
+                if (!file || !file.type.match('image.*')) {
+                    alert('Please select a valid image file (JPEG, PNG, or WebP).');
+                    return;
+                }
+                
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size exceeds 5MB limit. Please choose a smaller image.');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    originalImage = new Image();
+                    originalImage.onload = function() {
+                        originalWidth = originalImage.width;
+                        originalHeight = originalImage.height;
+                        aspectRatio = originalWidth / originalHeight;
+                        
+                        // Set initial dimensions
+                        widthInput.value = originalWidth;
+                        heightInput.value = originalHeight;
+                        
+                        originalPreview.src = originalImage.src;
+                        originalInfo.textContent = `Size: ${formatFileSize(file.size)} | Dimensions: ${originalWidth}x${originalHeight}`;
+                        
+                        // Show controls
+                        controlsSection.style.display = 'flex';
+                    };
+                    originalImage.src = e.target.result;
+                };
+                
+                reader.readAsDataURL(file);
+            }
+            
+            // Maintain aspect ratio when changing dimensions
+            widthInput.addEventListener('input', function() {
+                if (maintainRatio.checked && originalWidth && originalHeight) {
+                    heightInput.value = Math.round(widthInput.value / aspectRatio);
+                }
+            });
+            
+            heightInput.addEventListener('input', function() {
+                if (maintainRatio.checked && originalWidth && originalHeight) {
+                    widthInput.value = Math.round(heightInput.value * aspectRatio);
+                }
+            });
+            
+            // Resize button click handler
+            resizeBtn.addEventListener('click', function() {
+                if (!originalImage) {
+                    alert('Please upload an image first.');
+                    return;
+                }
+                
+                const newWidth = parseInt(widthInput.value);
+                const newHeight = parseInt(heightInput.value);
+                
+                if (isNaN(newWidth) || isNaN(newHeight) || newWidth <= 0 || newHeight <= 0) {
+                    alert('Please enter valid dimensions (positive numbers).');
+                    return;
+                }
+                
+                if (newWidth > 10000 || newHeight > 10000) {
+                    alert('Maximum dimension allowed is 10000px.');
+                    return;
+                }
+                
+                // Show loading
+                loading.style.display = 'block';
+                
+                // Use setTimeout to allow the UI to update before resizing starts
+                setTimeout(function() {
+                    resizeImage(originalImage, newWidth, newHeight, function(resizedDataUrl, resizedBlob) {
+                        // Hide loading
+                        loading.style.display = 'none';
+                        
+                        resizedImageBlob = resizedBlob;
+                        resizedPreview.src = resizedDataUrl;
+                        resizedInfo.textContent = `Dimensions: ${newWidth}x${newHeight}`;
+                        
+                        // Display new dimensions
+                        newDimensions.textContent = `${newWidth} × ${newHeight} pixels`;
+                        
+                        // Show preview and download sections
+                        previewSection.style.display = 'flex';
+                        resizeInfo.style.display = 'block';
+                        downloadSection.style.display = 'block';
+                    });
+                }, 100);
+            });
+            
+            // Reset button click handler
+            resetBtn.addEventListener('click', function() {
+                if (originalImage) {
+                    widthInput.value = originalWidth;
+                    heightInput.value = originalHeight;
+                }
+            });
+            
+            // Download button click handler
+            downloadBtn.addEventListener('click', function() {
+                if (!resizedImageBlob) {
+                    alert('No resized image available. Please resize an image first.');
+                    return;
+                }
+                
+                const downloadUrl = URL.createObjectURL(resizedImageBlob);
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = 'resized-image.jpg';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(downloadUrl);
+            });
+            
+            // Image resizing function
+            function resizeImage(img, width, height, callback) {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Set canvas dimensions
+                canvas.width = width;
+                canvas.height = height;
+                
+                // Draw image on canvas with new dimensions
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                // Get resized data URL
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+                
+                // Convert data URL to blob
+                const blob = dataURLToBlob(dataUrl);
+                
+                // Call callback with results
+                callback(dataUrl, blob);
+            }
+            
+            // Convert data URL to blob
+            function dataURLToBlob(dataUrl) {
+                const parts = dataUrl.split(';base64,');
+                const contentType = parts[0].split(':')[1];
+                const raw = window.atob(parts[1]);
+                const uInt8Array = new Uint8Array(raw.length);
+                
+                for (let i = 0; i < raw.length; ++i) {
+                    uInt8Array[i] = raw.charCodeAt(i);
+                }
+                
+                return new Blob([uInt8Array], { type: contentType });
+            }
+            
+            // Format file size to human readable format
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+        });
+    </script>
+</body>
+</html>
