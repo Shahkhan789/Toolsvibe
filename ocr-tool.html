@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online OCR tool to extract text from images. Convert JPG, PNG, GIF, BMP, WEBP images to editable text with advanced OCR technology.">
+    <meta name="keywords" content="OCR, image to text, extract text, convert image, text recognition, free OCR tool">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Tools Vibe">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://toolsvibe.com/ocr-tool.html">
+    <meta property="og:title" content="Image to Text OCR Tool | Tools Vibe">
+    <meta property="og:description" content="Free online OCR tool to extract text from images. Convert JPG, PNG, GIF, BMP, WEBP images to editable text.">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Image to Text OCR Tool | Tools Vibe">
+    <meta property="twitter:description" content="Free online OCR tool to extract text from images. Convert JPG, PNG, GIF, BMP, WEBP images to editable text.">
+    
+    <title>Image to Text OCR Tool | Extract Text from Images | Tools Vibe</title>
+    
+    <!-- External Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="ocr-tool.css">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Image to Text OCR Tool",
+      "description": "Free online OCR tool to extract text from images using advanced optical character recognition technology",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Any",
+      "permissions": "none",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Tools Vibe"
+      }
+    }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-cogs" aria-hidden="true"></i>
+                </div>
+                <h1>Tools Vibe</h1>
+            </div>
+            <p class="subtitle">Extract text from images with our powerful OCR technology. Simply upload your image and get editable text instantly!</p>
+        </header>
+        
+        <main>
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-image" aria-hidden="true"></i> 
+                    Image to Text Converter
+                </h2>
+                
+                <!-- Language Selection -->
+                <div class="language-selection">
+                    <label for="language-select">
+                        <i class="fas fa-language" aria-hidden="true"></i>
+                        OCR Language:
+                    </label>
+                    <select id="language-select" aria-label="Select OCR language">
+                        <option value="eng">English</option>
+                        <option value="spa">Spanish</option>
+                        <option value="fra">French</option>
+                        <option value="deu">German</option>
+                        <option value="ita">Italian</option>
+                        <option value="por">Portuguese</option>
+                        <option value="rus">Russian</option>
+                        <option value="chi_sim">Chinese (Simplified)</option>
+                        <option value="chi_tra">Chinese (Traditional)</option>
+                        <option value="jpn">Japanese</option>
+                        <option value="kor">Korean</option>
+                        <option value="ara">Arabic</option>
+                        <option value="hin">Hindi</option>
+                    </select>
+                </div>
+                
+                <!-- Error Message -->
+                <div class="error-message" id="error-message" role="alert" aria-live="polite">
+                    <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                    <span id="error-text">Error processing image. Please try another image.</span>
+                </div>
+                
+                <!-- Upload Area -->
+                <div class="upload-container" id="upload-area" tabindex="0" role="button" aria-label="Click to upload image or drag and drop">
+                    <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
+                    <div class="upload-text">
+                        <h3>Upload Your Image</h3>
+                        <p>Drag & drop your image here or click to browse files</p>
+                        <p>Supported formats: JPG, PNG, GIF, BMP, WEBP (Max: 10MB)</p>
+                    </div>
+                    <input type="file" id="file-input" accept="image/*" aria-label="Select image file">
+                    <button class="btn" id="browse-btn" type="button">
+                        <i class="fas fa-folder-open" aria-hidden="true"></i> Browse Files
+                    </button>
+                </div>
+                
+                <!-- Preview Section -->
+                <div class="preview-container" id="preview-section" style="display: none;">
+                    <div class="image-preview">
+                        <h3><i class="fas fa-eye" aria-hidden="true"></i> Image Preview</h3>
+                        <div class="image-container">
+                            <img id="preview-image" src="" alt="Uploaded image preview">
+                            <div class="zoom-controls">
+                                <button class="zoom-btn" id="zoom-in" type="button" aria-label="Zoom in">
+                                    <i class="fas fa-search-plus" aria-hidden="true"></i>
+                                </button>
+                                <button class="zoom-btn" id="zoom-out" type="button" aria-label="Zoom out">
+                                    <i class="fas fa-search-minus" aria-hidden="true"></i>
+                                </button>
+                                <button class="zoom-btn" id="zoom-reset" type="button" aria-label="Reset zoom">
+                                    <i class="fas fa-expand-arrows-alt" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="result-container">
+                        <h3><i class="fas fa-file-alt" aria-hidden="true"></i> Extracted Text</h3>
+                        <div class="result-box" id="result-text" aria-live="polite">
+                            <p class="placeholder-text">Text will appear here after processing</p>
+                        </div>
+                        <div class="text-options">
+                            <label>
+                                <input type="checkbox" id="preserve-formatting" checked>
+                                Preserve line breaks
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Progress Section -->
+                <div class="progress-container" id="progress-section" style="display: none;" role="status" aria-live="polite">
+                    <h3><i class="fas fa-sync-alt fa-spin" aria-hidden="true"></i> Processing Image</h3>
+                    <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                        <div class="progress" id="progress-bar"></div>
+                    </div>
+                    <p class="status-text" id="status-text">Initializing OCR engine...</p>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="action-buttons" id="action-buttons" style="display: none;">
+                    <button class="btn" id="extract-btn" type="button">
+                        <i class="fas fa-qrcode" aria-hidden="true"></i> Extract Text
+                    </button>
+                    <button class="btn btn-secondary" id="clear-btn" type="button">
+                        <i class="fas fa-trash-alt" aria-hidden="true"></i> Clear All
+                    </button>
+                    <button class="btn btn-success" id="copy-btn" type="button">
+                        <i class="fas fa-copy" aria-hidden="true"></i> Copy Text
+                    </button>
+                    <button class="btn btn-success" id="download-btn" type="button">
+                        <i class="fas fa-download" aria-hidden="true"></i> Download Text
+                    </button>
+                    <button class="btn btn-error" id="retry-btn" style="display: none;" type="button">
+                        <i class="fas fa-redo" aria-hidden="true"></i> Try Again
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Information Section -->
+            <div class="info-section">
+                <h3 class="info-title">
+                    <i class="fas fa-info-circle" aria-hidden="true"></i> 
+                    About Our OCR Tool
+                </h3>
+                <p>Our Image to Text converter uses advanced Optical Character Recognition (OCR) technology to accurately extract text from your images. It's perfect for converting scanned documents, screenshots, and photos into editable text.</p>
+                
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-bolt" aria-hidden="true"></i>
+                        <div>
+                            <h4>Fast Processing</h4>
+                            <p>Quickly extract text from images in seconds using client-side processing</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+                        <div>
+                            <h4>Mobile Friendly</h4>
+                            <p>Works perfectly on all devices and screen sizes with touch support</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                        <div>
+                            <h4>Secure & Private</h4>
+                            <p>Your images are processed in-browser and never uploaded to any server</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-language" aria-hidden="true"></i>
+                        <div>
+                            <h4>Multi-language Support</h4>
+                            <p>Supports over 100 languages for accurate text extraction</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tips-section">
+                    <h4>Tips for Better Results</h4>
+                    <ul>
+                        <li>Use clear, high-contrast images with readable text</li>
+                        <li>Position text horizontally for best recognition accuracy</li>
+                        <li>Ensure good lighting and minimal shadows in your images</li>
+                        <li>Crop the image to focus on the text area you want to extract</li>
+                        <li>For handwritten text, use clear printing if possible</li>
+                        <li>Higher resolution images generally produce better results</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>&copy; 2023 Tools Vibe | All-in-one Online Tools Platform</p>
+            <p>Extract text from images with our free OCR tool - No registration required!</p>
+        </footer>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script src="ocr-tool.js"></script>
+</body>
+</html>

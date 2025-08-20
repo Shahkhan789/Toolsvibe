@@ -1,0 +1,685 @@
+/* OCR Tool CSS - Tools Vibe */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #e3f2fd, #f0f8ff);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header Styles */
+header {
+    text-align: center;
+    padding: 30px 0;
+    margin-bottom: 30px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.logo-icon {
+    background: #2196f3;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(33, 150, 243, 0.3);
+}
+
+.logo-icon i {
+    color: white;
+    font-size: 24px;
+}
+
+h1 {
+    color: #2196f3;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Card Styles */
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.card-title {
+    color: #2196f3;
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Language Selection */
+.language-selection {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.language-selection label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 10px;
+    font-weight: 600;
+    color: #555;
+}
+
+#language-select {
+    padding: 8px 12px;
+    border: 2px solid #90caf9;
+    border-radius: 8px;
+    background: white;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#language-select:focus {
+    outline: none;
+    border-color: #2196f3;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+}
+
+/* Error Message */
+.error-message {
+    display: none;
+    background: #ffebee;
+    color: #c62828;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border-left: 4px solid #c62828;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.error-message i {
+    font-size: 18px;
+}
+
+/* Upload Container */
+.upload-container {
+    border: 3px dashed #90caf9;
+    border-radius: 20px;
+    padding: 40px 20px;
+    text-align: center;
+    background: #f8fdff;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.upload-container:hover,
+.upload-container:focus {
+    border-color: #2196f3;
+    background: #e3f2fd;
+    transform: translateY(-2px);
+}
+
+.upload-container.dragover {
+    border-color: #2196f3;
+    background: #e3f2fd;
+    transform: scale(1.02);
+}
+
+.upload-container i {
+    color: #2196f3;
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+.upload-text h3 {
+    color: #2196f3;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.upload-text p {
+    color: #666;
+    margin-bottom: 8px;
+}
+
+#file-input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+/* Button Styles */
+.btn {
+    background: #2196f3;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    margin: 10px 5px;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+}
+
+.btn:hover {
+    background: #1976d2;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+.btn-success {
+    background: #28a745;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+
+.btn-success:hover {
+    background: #218838;
+}
+
+.btn-error {
+    background: #dc3545;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+}
+
+.btn-error:hover {
+    background: #c82333;
+}
+
+/* Preview Container */
+.preview-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin: 30px 0;
+}
+
+.image-preview h3,
+.result-container h3 {
+    color: #2196f3;
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Image Container with Zoom */
+.image-container {
+    position: relative;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #f5f5f5;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#preview-image {
+    max-width: 100%;
+    max-height: 400px;
+    transition: transform 0.3s ease;
+    cursor: grab;
+}
+
+#preview-image:active {
+    cursor: grabbing;
+}
+
+.zoom-controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.zoom-btn {
+    background: rgba(33, 150, 243, 0.9);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.zoom-btn:hover {
+    background: rgba(33, 150, 243, 1);
+    transform: scale(1.1);
+}
+
+/* Result Container */
+.result-box {
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+    min-height: 300px;
+    background: #f9f9f9;
+    overflow-y: auto;
+    word-wrap: break-word;
+}
+
+.result-box pre {
+    white-space: pre-wrap;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.placeholder-text {
+    color: #999;
+    font-style: italic;
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.text-options {
+    margin-top: 15px;
+}
+
+.text-options label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+}
+
+.text-options input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* Progress Container */
+.progress-container {
+    text-align: center;
+    margin: 30px 0;
+    padding: 30px;
+    background: #f8fdff;
+    border-radius: 15px;
+    border: 2px solid #e3f2fd;
+}
+
+.progress-container h3 {
+    color: #2196f3;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    background: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progress {
+    height: 100%;
+    background: linear-gradient(90deg, #2196f3, #64b5f6);
+    border-radius: 10px;
+    transition: width 0.3s ease;
+    width: 0%;
+}
+
+.status-text {
+    color: #666;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Action Buttons */
+.action-buttons {
+    text-align: center;
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Info Section */
+.info-section {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.info-title {
+    color: #2196f3;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-section p {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+/* Features Grid */
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 20px;
+    background: #f8fdff;
+    border-radius: 15px;
+    border-left: 4px solid #2196f3;
+}
+
+.feature i {
+    color: #2196f3;
+    font-size: 24px;
+    margin-top: 5px;
+}
+
+.feature h4 {
+    color: #333;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+}
+
+.feature p {
+    color: #666;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* Tips Section */
+.tips-section {
+    background: #f8fdff;
+    padding: 25px;
+    border-radius: 15px;
+    border-left: 4px solid #2196f3;
+}
+
+.tips-section h4 {
+    color: #2196f3;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.tips-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.tips-section li {
+    color: #666;
+    margin-bottom: 10px;
+    padding-left: 25px;
+    position: relative;
+}
+
+.tips-section li:before {
+    content: '✓';
+    color: #28a745;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 30px 0;
+    color: #666;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    margin-top: 30px;
+}
+
+footer p {
+    margin-bottom: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .card {
+        padding: 25px;
+    }
+    
+    .preview-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .upload-container {
+        padding: 30px 15px;
+    }
+    
+    .upload-container i {
+        font-size: 48px;
+    }
+    
+    .features {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+    
+    .language-selection {
+        text-align: left;
+    }
+    
+    .language-selection label {
+        display: block;
+        margin-bottom: 8px;
+    }
+    
+    #language-select {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .card {
+        padding: 20px;
+    }
+    
+    .upload-container {
+        padding: 20px 10px;
+    }
+    
+    .upload-container i {
+        font-size: 40px;
+    }
+    
+    .info-section {
+        padding: 25px;
+    }
+    
+    .feature {
+        padding: 15px;
+    }
+}
+
+/* Touch-friendly enhancements */
+@media (hover: none) and (pointer: coarse) {
+    .btn {
+        min-height: 48px;
+        padding: 15px 20px;
+    }
+    
+    .zoom-btn {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .upload-container {
+        min-height: 250px;
+        padding: 50px 20px;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .upload-container {
+        border-width: 4px;
+    }
+    
+    .btn {
+        border: 2px solid transparent;
+    }
+    
+    .btn:focus {
+        border-color: currentColor;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+/* Focus styles for accessibility */
+*:focus {
+    outline: 2px solid #2196f3;
+    outline-offset: 2px;
+}
+
+button:focus,
+input:focus,
+select:focus {
+    outline: 2px solid #2196f3;
+    outline-offset: 2px;
+}
+
+/* Screen reader only content */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
