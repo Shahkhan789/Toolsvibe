@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Lock/Unlock Tool | Tools Vibe - Secure Your PDF Files</title>
+    <meta name="description" content="Free online tool to add password protection to your PDF files or remove passwords from secured PDFs. Keep your documents safe with Tools Vibe.">
+    <meta name="keywords" content="pdf lock, pdf unlock, pdf password, pdf security, protect pdf, unprotect pdf, pdf tools">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #0066ff;
+            --secondary-blue: #004ec3;
+            --light-blue: #e6f0ff;
+            --white: #ffffff;
+            --light-gray: #f5f7fa;
+            --dark-gray: #333333;
+            --medium-gray: #777777;
+            --success: #00c853;
+            --warning: #ff9800;
+            --error: #f44336;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: var(--white);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 2rem;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+        
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        nav a:hover {
+            opacity: 0.8;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--medium-gray);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .tool-container {
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 3rem;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid var(--light-blue);
+        }
+        
+        .tab {
+            padding: 1.2rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--medium-gray);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            flex: 1;
+        }
+        
+        .tab.active {
+            color: var(--primary-blue);
+            border-bottom: 3px solid var(--primary-blue);
+            background-color: var(--light-blue);
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 2rem;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .upload-area {
+            border: 2px dashed var(--primary-blue);
+            border-radius: 8px;
+            padding: 2.5rem;
+            text-align: center;
+            background-color: var(--light-blue);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .upload-area:hover {
+            background-color: #d9e8ff;
+        }
+        
+        .upload-area i {
+            font-size: 3rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+        
+        .upload-area h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-blue);
+        }
+        
+        .upload-area p {
+            color: var(--medium-gray);
+            margin-bottom: 1rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            color: var(--white);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 102, 255, 0.3);
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .file-list {
+            margin: 1.5rem 0;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+        }
+        
+        .file-item i {
+            color: var(--primary-blue);
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+        
+        .file-info {
+            flex-grow: 1;
+        }
+        
+        .file-name {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        
+        .file-size {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+        
+        .file-status {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+        
+        .status-locked {
+            background-color: #ffe6e6;
+            color: var(--error);
+        }
+        
+        .status-unlocked {
+            background-color: #e6ffed;
+            color: var(--success);
+        }
+        
+        .remove-btn {
+            color: #ff4d4f;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .password-panel {
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .option-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-blue);
+        }
+        
+        .password-input {
+            margin-bottom: 1rem;
+        }
+        
+        .password-input label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .password-input input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .password-strength {
+            height: 5px;
+            background-color: #eee;
+            border-radius: 3px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .strength-meter {
+            height: 100%;
+            width: 0;
+            transition: all 0.3s;
+        }
+        
+        .strength-weak {
+            background-color: var(--error);
+            width: 33%;
+        }
+        
+        .strength-medium {
+            background-color: var(--warning);
+            width: 66%;
+        }
+        
+        .strength-strong {
+            background-color: var(--success);
+            width: 100%;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .result-area {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--light-blue);
+            border-radius: 8px;
+            margin-top: 2rem;
+            display: none;
+        }
+        
+        .result-area i {
+            font-size: 3rem;
+            color: var(--success);
+            margin-bottom: 1rem;
+        }
+        
+        .result-area h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-blue);
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .feature-card {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+        
+        .feature-card i {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--primary-blue);
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: var(--white);
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: var(--white);
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .copyright {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .upload-area {
+                padding: 1.5rem;
+            }
+            
+            .upload-area i {
+                font-size: 2.5rem;
+            }
+            
+            .upload-area h3 {
+                font-size: 1.3rem;
+            }
+            
+            .tab-content {
+                padding: 1.5rem;
+            }
+            
+            .feature-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-tools"></i>
+                <h1>Tools Vibe</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Tools</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="hero">
+            <h2>PDF Lock & Unlock Tool</h2>
+            <p>Add password protection to your PDF files or remove passwords from secured PDFs. Keep your sensitive documents safe with military-grade encryption.</p>
+        </div>
+
+        <div class="tool-container">
+            <div class="tabs">
+                <div class="tab active" data-tab="lock">Lock PDF</div>
+                <div class="tab" data-tab="unlock">Unlock PDF</div>
+            </div>
+
+            <div class="tab-content active" id="lock-tab">
+                <div class="upload-area" id="lock-drop-area">
+                    <i class="fas fa-lock"></i>
+                    <h3>Upload PDF to Protect</h3>
+                    <p>Drag & drop file here or click to browse</p>
+                    <input type="file" id="lock-file-input" accept=".pdf" style="display: none;">
+                    <button class="btn" id="lock-browse-btn"><i class="fas fa-folder-open"></i> Browse Files</button>
+                </div>
+
+                <div class="file-list" id="lock-file-list">
+                    <!-- File will be listed here -->
+                </div>
+
+                <div class="password-panel">
+                    <h3 class="option-title">Set Password</h3>
+                    <div class="password-input">
+                        <label for="lock-password">Password</label>
+                        <input type="password" id="lock-password" placeholder="Enter a strong password">
+                        <div class="password-strength">
+                            <div class="strength-meter" id="lock-strength-meter"></div>
+                        </div>
+                    </div>
+                    <div class="password-input">
+                        <label for="lock-confirm-password">Confirm Password</label>
+                        <input type="password" id="lock-confirm-password" placeholder="Confirm your password">
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-large" id="lock-btn" disabled><i class="fas fa-lock"></i> Protect PDF</button>
+                    <button class="btn btn-large" id="lock-reset-btn"><i class="fas fa-redo"></i> Reset</button>
+                </div>
+
+                <div class="result-area" id="lock-result">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>PDF Protected Successfully!</h3>
+                    <p>Your PDF file is now password protected and ready to download</p>
+                    <button class="btn btn-large" id="lock-download-btn"><i class="fas fa-download"></i> Download Protected PDF</button>
+                </div>
+            </div>
+
+            <div class="tab-content" id="unlock-tab">
+                <div class="upload-area" id="unlock-drop-area">
+                    <i class="fas fa-unlock"></i>
+                    <h3>Upload Protected PDF</h3>
+                    <p>Drag & drop file here or click to browse</p>
+                    <input type="file" id="unlock-file-input" accept=".pdf" style="display: none;">
+                    <button class="btn" id="unlock-browse-btn"><i class="fas fa-folder-open"></i> Browse Files</button>
+                </div>
+
+                <div class="file-list" id="unlock-file-list">
+                    <!-- File will be listed here -->
+                </div>
+
+                <div class="password-panel">
+                    <h3 class="option-title">Enter PDF Password</h3>
+                    <div class="password-input">
+                        <label for="unlock-password">Password</label>
+                        <input type="password" id="unlock-password" placeholder="Enter the PDF password">
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-large" id="unlock-btn" disabled><i class="fas fa-unlock"></i> Unlock PDF</button>
+                    <button class="btn btn-large" id="unlock-reset-btn"><i class="fas fa-redo"></i> Reset</button>
+                </div>
+
+                <div class="result-area" id="unlock-result">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>PDF Unlocked Successfully!</h3>
+                    <p>Your PDF file is now unlocked and ready to download</p>
+                    <button class="btn btn-large" id="unlock-download-btn"><i class="fas fa-download"></i> Download Unlocked PDF</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Military-Grade Encryption</h3>
+                <p>Your PDF files are protected with AES-256 encryption, the same standard used by banks and governments.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-cloud"></i>
+                <h3>No Server Uploads</h3>
+                <p>All processing happens directly in your browser. Your files never leave your computer.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>Mobile Friendly</h3>
+                <p>Use our tool on any device - desktop, tablet, or smartphone.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="logo">
+                <i class="fas fa-tools"></i>
+                <h2>Tools Vibe</h2>
+            </div>
+            <div class="footer-links">
+                <a href="#">Home</a>
+                <a href="#">Tools</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Tools Vibe. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and contents
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+            });
+        });
+
+        // File input triggers
+        document.getElementById('lock-browse-btn').addEventListener('click', () => {
+            document.getElementById('lock-file-input').click();
+        });
+
+        document.getElementById('unlock-browse-btn').addEventListener('click', () => {
+            document.getElementById('unlock-file-input').click();
+        });
+
+        // Password strength indicator
+        const lockPassword = document.getElementById('lock-password');
+        const strengthMeter = document.getElementById('lock-strength-meter');
+        
+        lockPassword.addEventListener('input', () => {
+            const password = lockPassword.value;
+            let strength = 0;
+            
+            if (password.length > 0) strength += 1;
+            if (password.length >= 8) strength += 1;
+            if (/[A-Z]/.test(password)) strength += 1;
+            if (/[0-9]/.test(password)) strength += 1;
+            if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+            
+            // Reset classes
+            strengthMeter.className = 'strength-meter';
+            
+            // Apply appropriate strength class
+            if (strength > 0) {
+                if (strength <= 2) {
+                    strengthMeter.classList.add('strength-weak');
+                } else if (strength <= 4) {
+                    strengthMeter.classList.add('strength-medium');
+                } else {
+                    strengthMeter.classList.add('strength-strong');
+                }
+            }
+        });
+
+        // Password confirmation check
+        const confirmPassword = document.getElementById('lock-confirm-password');
+        
+        confirmPassword.addEventListener('input', () => {
+            if (lockPassword.value !== confirmPassword.value) {
+                confirmPassword.style.borderColor = 'var(--error)';
+            } else {
+                confirmPassword.style.borderColor = '';
+            }
+        });
+
+        // Simulate file processing for demo purposes
+        document.getElementById('lock-btn').addEventListener('click', () => {
+            // Check if passwords match
+            if (lockPassword.value !== confirmPassword.value) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            // In a real application, this would encrypt the PDF
+            // For demo, we'll just show the result area
+            document.getElementById('lock-result').style.display = 'block';
+        });
+
+        document.getElementById('unlock-btn').addEventListener('click', () => {
+            // In a real application, this would decrypt the PDF
+            // For demo, we'll just show the result area
+            document.getElementById('unlock-result').style.display = 'block';
+        });
+
+        // Reset buttons
+        document.getElementById('lock-reset-btn').addEventListener('click', () => {
+            document.getElementById('lock-file-list').innerHTML = '';
+            document.getElementById('lock-password').value = '';
+            document.getElementById('lock-confirm-password').value = '';
+            document.getElementById('lock-result').style.display = 'none';
+            document.getElementById('lock-btn').disabled = true;
+            strengthMeter.className = 'strength-meter';
+        });
+
+        document.getElementById('unlock-reset-btn').addEventListener('click', () => {
+            document.getElementById('unlock-file-list').innerHTML = '';
+            document.getElementById('unlock-password').value = '';
+            document.getElementById('unlock-result').style.display = 'none';
+            document.getElementById('unlock-btn').disabled = true;
+        });
+
+        // Enable buttons when files are selected (for demo)
+        document.getElementById('lock-file-input').addEventListener('change', () => {
+            document.getElementById('lock-btn').disabled = false;
+            // In a real app, you would list the selected file
+            document.getElementById('lock-file-list').innerHTML = `
+                <div class="file-item">
+                    <i class="fas fa-file-pdf"></i>
+                    <div class="file-info">
+                        <div class="file-name">document.pdf</div>
+                        <div class="file-size">2.4 MB</div>
+                    </div>
+                    <span class="file-status status-unlocked">Unprotected</span>
+                    <button class="remove-btn" onclick="removeLockFile()"><i class="fas fa-times"></i></button>
+                </div>
+            `;
+        });
+
+        document.getElementById('unlock-file-input').addEventListener('change', () => {
+            document.getElementById('unlock-btn').disabled = false;
+            // In a real app, you would list the selected file
+            document.getElementById('unlock-file-list').innerHTML = `
+                <div class="file-item">
+                    <i class="fas fa-file-pdf"></i>
+                    <div class="file-info">
+                        <div class="file-name">protected_document.pdf</div>
+                        <div class="file-size">2.5 MB</div>
+                    </div>
+                    <span class="file-status status-locked">Protected</span>
+                    <button class="remove-btn" onclick="removeUnlockFile()"><i class="fas fa-times"></i></button>
+                </div>
+            `;
+        });
+
+        // Download buttons
+        document.getElementById('lock-download-btn').addEventListener('click', () => {
+            // In a real implementation, this would download the actual encrypted file
+            // For demo purposes, we'll create a dummy download
+            const fileName = 'protected_document.pdf';
+            const dummyLink = document.createElement('a');
+            dummyLink.href = URL.createObjectURL(new Blob(['Simulated protected PDF file'], { type: 'application/pdf' }));
+            dummyLink.download = fileName;
+            document.body.appendChild(dummyLink);
+            dummyLink.click();
+            document.body.removeChild(dummyLink);
+        });
+
+        document.getElementById('unlock-download-btn').addEventListener('click', () => {
+            // In a real implementation, this would download the actual decrypted file
+            // For demo purposes, we'll create a dummy download
+            const fileName = 'unlocked_document.pdf';
+            const dummyLink = document.createElement('a');
+            dummyLink.href = URL.createObjectURL(new Blob(['Simulated unlocked PDF file'], { type: 'application/pdf' }));
+            dummyLink.download = fileName;
+            document.body.appendChild(dummyLink);
+            dummyLink.click();
+            document.body.removeChild(dummyLink);
+        });
+
+        // Remove file functions
+        function removeLockFile() {
+            document.getElementById('lock-file-list').innerHTML = '';
+            document.getElementById('lock-file-input').value = '';
+            document.getElementById('lock-btn').disabled = true;
+        }
+
+        function removeUnlockFile() {
+            document.getElementById('unlock-file-list').innerHTML = '';
+            document.getElementById('unlock-file-input').value = '';
+            document.getElementById('unlock-btn').disabled = true;
+        }
+
+        // Drag and drop area highlighting
+        const dropAreas = document.querySelectorAll('.upload-area');
+        
+        dropAreas.forEach(area => {
+            area.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                area.style.borderColor = '#0066ff';
+                area.style.backgroundColor = '#d9e8ff';
+            });
+            
+            area.addEventListener('dragleave', () => {
+                area.style.borderColor = '#0066ff';
+                area.style.backgroundColor = '#e6f0ff';
+            });
+            
+            area.addEventListener('drop', (e) => {
+                e.preventDefault();
+                area.style.borderColor = '#0066ff';
+                area.style.backgroundColor = '#e6f0ff';
+                
+                // In a real app, you would handle the dropped files
+                if (area.id === 'lock-drop-area') {
+                    document.getElementById('lock-btn').disabled = false;
+                    document.getElementById('lock-file-list').innerHTML = `
+                        <div class="file-item">
+                            <i class="fas fa-file-pdf"></i>
+                            <div class="file-info">
+                                <div class="file-name">dropped_file.pdf</div>
+                                <div class="file-size">2.1 MB</div>
+                            </div>
+                            <span class="file-status status-unlocked">Unprotected</span>
+                            <button class="remove-btn" onclick="removeLockFile()"><i class="fas fa-times"></i></button>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('unlock-btn').disabled = false;
+                    document.getElementById('unlock-file-list').innerHTML = `
+                        <div class="file-item">
+                            <i class="fas fa-file-pdf"></i>
+                            <div class="file-info">
+                                <div class="file-name">dropped_protected.pdf</div>
+                                <div class="file-size">2.3 MB</div>
+                            </div>
+                            <span class="file-status status-locked">Protected</span>
+                            <button class="remove-btn" onclick="removeUnlockFile()"><i class="fas fa-times"></i></button>
+                        </div>
+                    `;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
